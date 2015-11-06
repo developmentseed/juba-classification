@@ -17,3 +17,6 @@ shp2pgsql -I -s 4326 \
 # Count the number of pixels of each category by block
 psql -d block_category_frequencies -f block_category_frequencies.sql
 psql -d block_category_frequencies -c "\COPY histograms TO 'histograms.csv' DELIMITER ',' CSV HEADER;"
+
+# Run the regression and output its summary
+Rscript regression.r
