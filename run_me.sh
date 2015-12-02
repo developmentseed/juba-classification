@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # Create the PostGIS database
+dropdb block_category_frequencies
 createdb block_category_frequencies
 psql -d block_category_frequencies -c "CREATE EXTENSION postgis;"
 
 # Convert the data to SQL format
-raster2pgsql -I -C -t 50x50 -s 32636 \
-	dg-juba/054805119010_01/054805119010_01_P001_MUL/15MAY08083356-M3DS-054805119010_01_P001.TIF \
+raster2pgsql -I -C -t 100x100 -s 32636 \
+	juba-data/juba_10category.tif \
 	imagery \
 	| psql -q -d block_category_frequencies
 shp2pgsql -I -s 4326 \

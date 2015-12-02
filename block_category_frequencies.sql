@@ -22,13 +22,21 @@ CREATE VIEW imagery_blocks AS (
 		imagery
 	WHERE ST_Intersects(imagery.rast, blocks.geom)
 );
-CREATE TABLE histograms AS (
+CREATE VIEW histograms_tiled AS (
 	SELECT gid,
 		(histogram).min AS category,
 		(histogram).count
 	FROM (
 		SELECT gid,
-			ST_Histogram(imagery_blocks.rast, 1, 10) AS histogram
+			ST_Histogram(imagery_blocks.rast, 1, 17, ARRAY[1]) AS histogram
 		FROM imagery_blocks
 	) AS histogram
+);
+CREATE TABLE histograms AS (
+	SELECT gid,
+		category,
+		SUM(count) AS count
+	FROM histograms_tiled
+	GROUP BY gid,
+		category
 );
